@@ -19,6 +19,13 @@ class SecLibGateway implements GatewayInterface {
 	 */
 	protected $port = 22;
 
+    /**
+     * The timeout for commands.
+     *
+     * @var int
+     */
+    protected $timeout = 10;
+
 	/**
 	 * The authentication credential set.
 	 *
@@ -48,11 +55,12 @@ class SecLibGateway implements GatewayInterface {
 	 * @param  \Illuminate\Filesystem\Filesystem  $files
 	 * @return void
 	 */
-	public function __construct($host, array $auth, Filesystem $files)
-	{
-		$this->auth = $auth;
-		$this->files = $files;
-		$this->setHostAndPort($host);
+	public function __construct($host, array $auth, Filesystem $files, $timeout)
+    {
+        $this->auth = $auth;
+        $this->files = $files;
+        $this->setHostAndPort($host);
+        $this->setTimeout($timeout);
 	}
 
 	/**
@@ -74,6 +82,30 @@ class SecLibGateway implements GatewayInterface {
 			$this->port = (int) $this->port;
 		}
 	}
+
+    /**
+     * Get timeout.
+     *
+     * @return int
+     */
+    public function getTimeout()
+    {
+        return $this->timeout;
+    }
+
+    /**
+     * Set timeout.
+     *
+     * $ssh->exec('ping 127.0.0.1'); on a Linux host will never return
+     * and will run indefinitely. setTimeout() makes it so it'll timeout.
+     * Setting $timeout to false or 0 will mean there is no timeout.
+     *
+     * @param int $timeout
+     */
+    protected function setTimeout($timeout)
+    {
+        $this->timeout = (int) $timeout;
+    }
 
 	/**
 	 * Connect to the SSH server.
@@ -315,7 +347,7 @@ class SecLibGateway implements GatewayInterface {
 	{
 		if ($this->connection) return $this->connection;
 
-		return $this->connection = new Net_SFTP($this->host, $this->port);
+		return $this->connection = new Net_SFTP($this->host, $this->port, $this->timeout);
 	}
 
 }
