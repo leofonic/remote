@@ -1,5 +1,5 @@
 {
-    "name": "illuminate/remote",
+    "name": "leofonic/remote",
     "license": "MIT",
     "authors": [
         {
@@ -11,7 +11,7 @@
         "php": ">=5.4.0",
         "illuminate/filesystem": "4.2.*",
         "illuminate/support": "4.2.*",
-        "phpseclib/phpseclib": "0.3.*"
+        "phpseclib/phpseclib": "1.*"
     },
     "require-dev": {
         "illuminate/console": "4.2.*"
